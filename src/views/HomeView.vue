@@ -45,6 +45,12 @@ export default {
         v-model="searchQuery"
         @input="changeInput"
       />
+      <p
+        v-if="searchResults.length === 0 && inputEntered"
+        class="py-2 mx-2 cursor-pointer border-b border-weather-primary"
+      >
+        No results match your query
+      </p>
       <ul v-if="inputEntered" class="bg-weather-secondary text-white text-sm">
         <li
           v-for="result in searchResults"
