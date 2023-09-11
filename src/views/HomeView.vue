@@ -1,6 +1,7 @@
 <script>
-import { apiAccessToken, apiUrl } from '../config'
+import { geolocationAccessToken, geolocationApiUrl } from '../config'
 import axios from 'axios'
+import router from '../router'
 
 export default {
   data() {
@@ -14,7 +15,7 @@ export default {
     async getSearchResults() {
       if (this.searchQuery.trim().length > 0) {
         const results = await axios.get(
-          `${apiUrl}/${this.searchQuery}.json?access_token=${apiAccessToken}&types=place`
+          `${geolocationApiUrl}/${this.searchQuery}.json?access_token=${geolocationAccessToken}&types=place`
         )
         const { features } = results.data
         this.searchResults = features
@@ -24,6 +25,19 @@ export default {
     changeInput() {
       clearTimeout(this.searchTimeout)
       this.searchTimeout = setTimeout(this.getSearchResults, 500)
+    },
+
+    previewCity(result) {
+      const [city, state] = result.place_name.split(',')
+      router.push({
+        name: 'cityView',
+        params: { state: state.replaceAll(' ', ''), city },
+        query: {
+          lat: result.geometry.coordinates[1],
+          lng: result.geometry.coordinates[0],
+          preview: true
+        }
+      });
     }
   },
 
@@ -56,6 +70,7 @@ export default {
           v-for="result in searchResults"
           :key="result.id"
           class="py-2 mx-2 cursor-pointer border-b border-weather-primary"
+          @click="previewCity(result)"
         >
           {{ result.place_name }}
         </li>

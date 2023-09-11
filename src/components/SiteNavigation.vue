@@ -14,9 +14,6 @@
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"
           @click="toggleModal"
         ></i>
-        <i
-          class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"
-        ></i>
       </div>
       <base-modal :modalActive="modalActive" @closeModal="toggleModal">
         <div class="text-black">
